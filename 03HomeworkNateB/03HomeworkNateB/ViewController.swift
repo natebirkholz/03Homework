@@ -10,7 +10,7 @@ import UIKit
 
 
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate/*, EditNameDelegate*/ {
     
     @IBOutlet weak var tableViewMain: UITableView!
     var peopleArray = [Person]()
@@ -146,6 +146,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
 
-
+    
+//    func func editNameDidFinish(controller: DetailViewController, firstNameBack: String, lastNameBack: String) {
+//        pizza.pizzaType = type
+//        pizza.pizzaPricePerInSq[pizza.pizzaType] = price
+//        controller.navigationController.popViewControllerAnimated(true)
+//        displayPizza()
+//    }
 }
 

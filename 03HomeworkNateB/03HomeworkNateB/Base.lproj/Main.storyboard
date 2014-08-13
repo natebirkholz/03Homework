@@ -13,7 +13,7 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Hna-VN-HDL">
@@ -71,6 +71,7 @@
                         <viewControllerLayoutGuide type="bottom" id="OKZ-mq-jnY"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8he-RP-6yX">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mh7-g3-NfM">
@@ -111,7 +112,11 @@
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Detail Editor" id="zXj-Lk-1XO">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="PWY-IN-TDq"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="PWY-IN-TDq">
+                            <connections>
+                                <action selector="saveButton:" destination="grk-Kx-au6" id="pve-j8-brf"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4">

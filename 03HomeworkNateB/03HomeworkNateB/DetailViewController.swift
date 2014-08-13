@@ -8,15 +8,16 @@
 
 import UIKit
 
-//protocol EditNameDelegate{
-//    func editNameDidFinish(controller:DetailViewController, type:String,price:Double)
-//}
+protocol EditNameDelegate{
+    func editNameDidFinish(controller:DetailViewController, firstNameBack:String,lastNameBack:String)
+}
 
 class DetailViewController: UIViewController {
     
     var namePass = [Person]()
     var firstNameEdit = ""
     var lastNameEdit = ""
+    var delegate:EditNameDelegate? = nil
     
     @IBOutlet weak var firstNameField: UITextField!
     @IBOutlet weak var lastNameField: UITextField!
@@ -27,6 +28,14 @@ class DetailViewController: UIViewController {
         firstNameField.text = firstNameEdit
         lastNameField.text = lastNameEdit
         
+    }
+    
+//    http://makeapppie.com/2014/07/05/using-delegates-and-segues-part-2-the-pizza-demo-app/
+    
+    @IBAction func saveButton(sender: UIBarButtonItem) {
+//        if delegate {
+//            delegate!.editNameDidFinish(self, firstNameBack: firstNameEdit, lastNameBack: lastNameEdit)
+//        }
     }
 
     @IBAction func firstNameField(sender: UITextField) {
