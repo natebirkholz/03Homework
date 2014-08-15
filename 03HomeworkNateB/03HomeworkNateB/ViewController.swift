@@ -14,15 +14,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var tableViewMain: UITableView!
     var peopleArray = [Person]()
-    var selectedPerson = [Person]()
-    var firstNameEdit : String = ""
-    var lastNameEdit : String = ""
-//    init (firstNameEdit : String) {
-//        self.firstNameEdit = firstNameEdit
-//    }
-//    init (lastNameEdit : String) {
-//        self.lastNameEdit = lastNameEdit
-//    }
+//    var selectedPerson = [Person]()
+//    var firstNameEdit = String()
+//    var lastNameEdit = String()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,15 +25,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.tableViewMain.delegate = self
         
         self.createPeopleArray()
-
-        
-        
         
     }
 
     func createPeopleArray() {
         
-        if peopleArray.count < 1 {
+        if peopleArray.isEmpty {
 
         var nateB = Person(firstName: "Nate", lastName: "Birkholz")
         var matthewB = Person(firstName: "Matthew", lastName: "Brightbill")
@@ -104,6 +96,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+    }
 
     func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
         return self.peopleArray.count
@@ -122,27 +117,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     
-    func tableView(tableView: UITableView!, willSelectRowAtIndexPath indexPath: NSIndexPath!) -> NSIndexPath! {
-                var personForRow = self.peopleArray[indexPath.row]
-                firstNameEdit = personForRow.firstName
-                lastNameEdit = personForRow.lastName
-        
-        return indexPath
-    }
-    
-    func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
-        
-        println("Section is \(indexPath.section) and row is \(indexPath.row)")
-        
-        
-    }
+
     
     override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
         if segue.identifier == "detailVCSegue" {
+            var selectedPerson = self.peopleArray[self.tableViewMain.indexPathForSelectedRow().row]
             
             let vc = segue.destinationViewController as DetailViewController
-            vc.firstNameEdit = firstNameEdit
-            vc.lastNameEdit = lastNameEdit
+            
+            vc.selectedPerson = selectedPerson
+//            vc.firstNameEdit = firstNameEdit
+//            vc.lastNameEdit = lastNameEdit
         }
     }
 

@@ -8,16 +8,9 @@
 
 import UIKit
 
-protocol EditNameDelegate{
-    func editNameDidFinish(controller:DetailViewController, firstNameBack:String,lastNameBack:String)
-}
-
 class DetailViewController: UIViewController {
     
-    var namePass = [Person]()
-    var firstNameEdit = ""
-    var lastNameEdit = ""
-    var delegate:EditNameDelegate? = nil
+    var selectedPerson : Person?
     
     @IBOutlet weak var firstNameField: UITextField!
     @IBOutlet weak var lastNameField: UITextField!
@@ -25,8 +18,8 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        firstNameField.text = firstNameEdit
-        lastNameField.text = lastNameEdit
+        self.firstNameField.text = self.selectedPerson?.firstName
+        self.lastNameField.text = self.selectedPerson?.lastName
         
     }
     
@@ -38,29 +31,13 @@ class DetailViewController: UIViewController {
 //        }
     }
 
-    @IBAction func firstNameField(sender: UITextField) {
-        let firstNameString = sender.text
-        firstNameEdit = sender.text
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         
-        println("firstNameString is \(firstNameString)")
-        println("firstNameEdit is \(firstNameEdit)")
+        self.selectedPerson?.firstName = self.firstNameField.text
+        self.selectedPerson?.lastName = self.lastNameField.text
     }
-    
-    @IBAction func lastNameField(sender: UITextField) {
-        let lastNameString = sender.text
-        lastNameEdit = sender.text
-        
-        println("lastNameString is \(lastNameString)")
-        println("lastNameEdit is \(lastNameEdit)")
-    }
-    
-    func displayFirstNameInText(){
-        firstNameField.text = firstNameEdit
-    }
-    
-    func displayLastNameInText(){
-        lastNameField.text = lastNameEdit
-    }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
