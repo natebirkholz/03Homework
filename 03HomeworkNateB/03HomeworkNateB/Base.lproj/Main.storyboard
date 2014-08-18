@@ -89,13 +89,7 @@
                             <constraint firstItem="Mh7-g3-NfM" firstAttribute="centerX" secondItem="SBt-CZ-TLk" secondAttribute="centerX" id="w6P-Ko-av3"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Detail Editor" id="zXj-Lk-1XO">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="PWY-IN-TDq">
-                            <connections>
-                                <action selector="saveButton:" destination="grk-Kx-au6" id="pve-j8-brf"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Detail Editor" id="zXj-Lk-1XO"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4">
                         <size key="portraitSize" width="320" height="568"/>

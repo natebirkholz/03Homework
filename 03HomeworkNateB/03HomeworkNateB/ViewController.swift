@@ -10,86 +10,23 @@ import UIKit
 
 
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate/*, EditNameDelegate*/ {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableViewMain: UITableView!
     var peopleArray = [Person]()
-//    var selectedPerson = [Person]()
-//    var firstNameEdit = String()
-//    var lastNameEdit = String()
+    var plistpath : String?
+
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableViewMain.dataSource = self
         self.tableViewMain.delegate = self
-        
-        self.createPeopleArray()
+        self.createPeoplePlist()
+
         
     }
 
-    func createPeopleArray() {
-        
-        if peopleArray.isEmpty {
-
-        var nateB = Person(firstName: "Nate", lastName: "Birkholz")
-        var matthewB = Person(firstName: "Matthew", lastName: "Brightbill")
-        var jeffC = Person(firstName: "Jeff", lastName: "Chavez")
-        var johnC = Person(firstName: "John", lastName: "Clem")
-        var christieF = Person(firstName: "Christie", lastName: "Ferderer")
-        var davidF = Person(firstName: "David", lastName: "Fry")
-        var adrianG = Person(firstName: "Adrian", lastName: "Gherle")
-        var jakeH = Person(firstName: "Jake", lastName: "Hawken")
-        var bradJ = Person(firstName: "Brad", lastName: "Johnson")
-        var shamsK = Person(firstName: "Shams", lastName: "Kazi")
-        var cameronK = Person(firstName: "Cameron", lastName: "Klein")
-        var koriK = Person(firstName: "Kori", lastName: "Kolodziejczak")
-        var parkerL = Person(firstName: "Parker", lastName: "Lewis")
-        var nathanM = Person(firstName: "Nathan", lastName: "Ma")
-        var caseyM = Person(firstName: "Casey", lastName: "MacPhee")
-        var brendanM = Person(firstName: "Brendan", lastName: "McAleer")
-        var brianM = Person(firstName: "Brian", lastName: "Mendez")
-        var markM = Person(firstName: "Mark", lastName: "Morris")
-        var rowanN = Person(firstName: "Rowan", lastName: "North")
-        var kevinP = Person(firstName: "Kevin", lastName: "Pham")
-        var willR = Person(firstName: "Will", lastName: "Richman")
-        var heatherT = Person(firstName: "Heather", lastName: "Thueringer")
-        var tuanV = Person(firstName: "Tuan", lastName: "Vu")
-        var zackW = Person(firstName: "Zack", lastName: "Walkingstick")
-        var saraW = Person(firstName: "Sara", lastName: "Wong")
-        var hiongyaoZ = Person(firstName: "Hongyao", lastName: "Zhang")
-        
-        self.peopleArray.append(nateB)
-        self.peopleArray.append(matthewB)
-        self.peopleArray.append(jeffC)
-        self.peopleArray.append(johnC)
-        self.peopleArray.append(christieF)
-        self.peopleArray.append(davidF)
-        self.peopleArray.append(adrianG)
-        self.peopleArray.append(jakeH)
-        self.peopleArray.append(bradJ)
-        self.peopleArray.append(shamsK)
-        self.peopleArray.append(cameronK)
-        self.peopleArray.append(koriK)
-        self.peopleArray.append(parkerL)
-        self.peopleArray.append(nathanM)
-        self.peopleArray.append(caseyM)
-        self.peopleArray.append(brendanM)
-        self.peopleArray.append(brianM)
-        self.peopleArray.append(markM)
-        self.peopleArray.append(rowanN)
-        self.peopleArray.append(kevinP)
-        self.peopleArray.append(willR)
-        self.peopleArray.append(heatherT)
-        self.peopleArray.append(tuanV)
-        self.peopleArray.append(zackW)
-        self.peopleArray.append(saraW)
-        self.peopleArray.append(hiongyaoZ)
-        
-        println("\(peopleArray)")
-        
-        }
-    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -98,10 +35,71 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.tableViewMain.reloadData()
+        [NSKeyedArchiver.archiveRootObject(peopleArray, toFile: plistpath)]
     }
 
+    func createPeoplePlist() {
+        
+        let fileManager = (NSFileManager.defaultManager())
+        let directorys : [String]? = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory,NSSearchPathDomainMask.AllDomainsMask, true) as? [String]
+        
+        println("value of directorys is \(directorys)")
+        
+        if (directorys != nil){
+            let directories:[String] = directorys!;
+            let pathToFile = directories[0]; //documents directory
+            
+            let plistfile = "PeopleArray.plist"
+            plistpath = pathToFile.stringByAppendingPathComponent(plistfile);
+            
+            if !fileManager.fileExistsAtPath(plistpath){  //writing Plist file
+                
+                self.createInitialPeople()
+                
+                println("Saving to Plist")
+                
+                [NSKeyedArchiver.archiveRootObject(peopleArray, toFile: plistpath)]
+                
+                println("writing to path \(plistpath)")
+                
+                
+            } else {            //Reading Plist file
+                println("\n\nPlist file found at \(plistpath)")
+                
+                peopleArray = NSKeyedUnarchiver.unarchiveObjectWithFile(plistpath) as [Person]
+                
+                
+                
+            }
+        }
+        
+        
+    }
+
+    
+    func numberOfSectionsInTableView(tableView: UITableView!) -> Int {
+        return 2
+    }
+    
+    func tableView(tableView: UITableView!, titleForHeaderInSection section: Int) -> String! {
+        if (section == 0) {
+            return "Instructors"
+        } else {
+            return "Students"
+        }
+    }
+    
+    func tableView(tableView: UITableView!, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50.0
+    }
+    
     func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
+        if (section == 0) {
+            return 2
+        } else {
         return self.peopleArray.count
+        }
     }
     
     
@@ -126,17 +124,74 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let vc = segue.destinationViewController as DetailViewController
             
             vc.selectedPerson = selectedPerson
-//            vc.firstNameEdit = firstNameEdit
-//            vc.lastNameEdit = lastNameEdit
+
+        }
+    }
+
+    func createInitialPeople() {
+        
+        if peopleArray.isEmpty {
+            
+            var nateB = Person(firstName: "Nate", lastName: "Birkholz")
+            var matthewB = Person(firstName: "Matthew", lastName: "Brightbill")
+            var jeffC = Person(firstName: "Jeff", lastName: "Chavez")
+            var johnC = Person(firstName: "John", lastName: "Clem")
+            var christieF = Person(firstName: "Christie", lastName: "Ferderer")
+            var davidF = Person(firstName: "David", lastName: "Fry")
+            var adrianG = Person(firstName: "Adrian", lastName: "Gherle")
+            var jakeH = Person(firstName: "Jake", lastName: "Hawken")
+            var bradJ = Person(firstName: "Brad", lastName: "Johnson")
+            var shamsK = Person(firstName: "Shams", lastName: "Kazi")
+            var cameronK = Person(firstName: "Cameron", lastName: "Klein")
+            var koriK = Person(firstName: "Kori", lastName: "Kolodziejczak")
+            var parkerL = Person(firstName: "Parker", lastName: "Lewis")
+            var nathanM = Person(firstName: "Nathan", lastName: "Ma")
+            var caseyM = Person(firstName: "Casey", lastName: "MacPhee")
+            var brendanM = Person(firstName: "Brendan", lastName: "McAleer")
+            var brianM = Person(firstName: "Brian", lastName: "Mendez")
+            var markM = Person(firstName: "Mark", lastName: "Morris")
+            var rowanN = Person(firstName: "Rowan", lastName: "North")
+            var kevinP = Person(firstName: "Kevin", lastName: "Pham")
+            var willR = Person(firstName: "Will", lastName: "Richman")
+            var heatherT = Person(firstName: "Heather", lastName: "Thueringer")
+            var tuanV = Person(firstName: "Tuan", lastName: "Vu")
+            var zackW = Person(firstName: "Zack", lastName: "Walkingstick")
+            var saraW = Person(firstName: "Sara", lastName: "Wong")
+            var hiongyaoZ = Person(firstName: "Hongyao", lastName: "Zhang")
+            
+            self.peopleArray.append(nateB)
+            self.peopleArray.append(matthewB)
+            self.peopleArray.append(jeffC)
+            self.peopleArray.append(johnC)
+            self.peopleArray.append(christieF)
+            self.peopleArray.append(davidF)
+            self.peopleArray.append(adrianG)
+            self.peopleArray.append(jakeH)
+            self.peopleArray.append(bradJ)
+            self.peopleArray.append(shamsK)
+            self.peopleArray.append(cameronK)
+            self.peopleArray.append(koriK)
+            self.peopleArray.append(parkerL)
+            self.peopleArray.append(nathanM)
+            self.peopleArray.append(caseyM)
+            self.peopleArray.append(brendanM)
+            self.peopleArray.append(brianM)
+            self.peopleArray.append(markM)
+            self.peopleArray.append(rowanN)
+            self.peopleArray.append(kevinP)
+            self.peopleArray.append(willR)
+            self.peopleArray.append(heatherT)
+            self.peopleArray.append(tuanV)
+            self.peopleArray.append(zackW)
+            self.peopleArray.append(saraW)
+            self.peopleArray.append(hiongyaoZ)
+            
+            println("\(peopleArray)")
+            
         }
     }
 
     
-//    func func editNameDidFinish(controller: DetailViewController, firstNameBack: String, lastNameBack: String) {
-//        pizza.pizzaType = type
-//        pizza.pizzaPricePerInSq[pizza.pizzaType] = price
-//        controller.navigationController.popViewControllerAnimated(true)
-//        displayPizza()
-//    }
+
 }
 

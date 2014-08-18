@@ -25,11 +25,7 @@ class DetailViewController: UIViewController {
     
 //    http://makeapppie.com/2014/07/05/using-delegates-and-segues-part-2-the-pizza-demo-app/
     
-    @IBAction func saveButton(sender: UIBarButtonItem) {
-//        if delegate {
-//            delegate!.editNameDidFinish(self, firstNameBack: firstNameEdit, lastNameBack: lastNameEdit)
-//        }
-    }
+
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
