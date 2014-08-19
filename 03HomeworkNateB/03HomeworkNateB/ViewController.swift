@@ -14,7 +14,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var tableViewMain: UITableView!
     var peopleArray = [Person]()
+    var instructorArray = [Person]()
     var plistpath : String?
+    var instructorpath : String?
 
 
     
@@ -22,7 +24,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         self.tableViewMain.dataSource = self
         self.tableViewMain.delegate = self
+                self.createInstructorPlist()
         self.createPeoplePlist()
+
 
         
     }
@@ -34,8 +38,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     override func viewWillAppear(animated: Bool) {
+        var typeOfPerson : String?
         super.viewWillAppear(animated)
         self.tableViewMain.reloadData()
+        
+        [NSKeyedArchiver.archiveRootObject(instructorArray, toFile: instructorpath)]
+
         [NSKeyedArchiver.archiveRootObject(peopleArray, toFile: plistpath)]
     }
 
@@ -76,6 +84,43 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         
     }
+    
+    func createInstructorPlist() {
+        
+        let fileManager = (NSFileManager.defaultManager())
+        let directorys : [String]? = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory,NSSearchPathDomainMask.AllDomainsMask, true) as? [String]
+        
+        println("value of directorys is \(directorys)")
+        
+        if (directorys != nil){
+            let directories:[String] = directorys!;
+            let pathToFile = directories[0]; //documents directory
+            
+            let plistfile = "InstructorArray.plist"
+            instructorpath = pathToFile.stringByAppendingPathComponent(plistfile);
+            
+            if !fileManager.fileExistsAtPath(instructorpath){  //writing Plist file
+                
+                self.createInitialInstructors()
+                
+                println("Saving to Plist")
+                
+                [NSKeyedArchiver.archiveRootObject(instructorArray, toFile: instructorpath)]
+                
+                println("writing to path \(instructorpath)")
+                
+                
+            } else {            //Reading Plist file
+                println("\n\nPlist file found at \(instructorpath)")
+                
+                instructorArray = NSKeyedUnarchiver.unarchiveObjectWithFile(instructorpath) as [Person]
+
+                
+            }
+        }
+        
+        
+    }
 
     
     func numberOfSectionsInTableView(tableView: UITableView!) -> Int {
@@ -91,12 +136,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(tableView: UITableView!, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50.0
+        return 60.0
     }
     
     func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
         if (section == 0) {
-            return 2
+            return self.instructorArray.count
         } else {
         return self.peopleArray.count
         }
@@ -107,8 +152,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let cell = tableViewMain.dequeueReusableCellWithIdentifier("CellMain", forIndexPath: indexPath) as UITableViewCell
         
+        if indexPath.section == 0 {
+            var personForRow = self.instructorArray[indexPath.row]
+            cell.textLabel.text = personForRow.fullName()
+        } else {
+        
         var personForRow = self.peopleArray[indexPath.row]
         cell.textLabel.text = personForRow.fullName()
+        }
+        
+        println("cell is \(cell), indexpath is \(indexPath)")
         
         return cell
         
@@ -119,11 +172,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
         if segue.identifier == "detailVCSegue" {
+            if self.tableViewMain.indexPathForSelectedRow().section == 0 {
+
+                var selectedPerson = self.instructorArray[self.tableViewMain.indexPathForSelectedRow().row]
+                
+                let vc = segue.destinationViewController as DetailViewController
+                
+                vc.selectedPerson = selectedPerson
+                
+            } else {
+                
             var selectedPerson = self.peopleArray[self.tableViewMain.indexPathForSelectedRow().row]
             
             let vc = segue.destinationViewController as DetailViewController
             
             vc.selectedPerson = selectedPerson
+                
+            }
 
         }
     }
@@ -135,12 +200,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             var nateB = Person(firstName: "Nate", lastName: "Birkholz")
             var matthewB = Person(firstName: "Matthew", lastName: "Brightbill")
             var jeffC = Person(firstName: "Jeff", lastName: "Chavez")
-            var johnC = Person(firstName: "John", lastName: "Clem")
             var christieF = Person(firstName: "Christie", lastName: "Ferderer")
             var davidF = Person(firstName: "David", lastName: "Fry")
             var adrianG = Person(firstName: "Adrian", lastName: "Gherle")
             var jakeH = Person(firstName: "Jake", lastName: "Hawken")
-            var bradJ = Person(firstName: "Brad", lastName: "Johnson")
             var shamsK = Person(firstName: "Shams", lastName: "Kazi")
             var cameronK = Person(firstName: "Cameron", lastName: "Klein")
             var koriK = Person(firstName: "Kori", lastName: "Kolodziejczak")
@@ -162,12 +225,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.peopleArray.append(nateB)
             self.peopleArray.append(matthewB)
             self.peopleArray.append(jeffC)
-            self.peopleArray.append(johnC)
             self.peopleArray.append(christieF)
             self.peopleArray.append(davidF)
             self.peopleArray.append(adrianG)
             self.peopleArray.append(jakeH)
-            self.peopleArray.append(bradJ)
             self.peopleArray.append(shamsK)
             self.peopleArray.append(cameronK)
             self.peopleArray.append(koriK)
@@ -186,9 +247,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.peopleArray.append(saraW)
             self.peopleArray.append(hiongyaoZ)
             
-            println("\(peopleArray)")
+//            println("\(peopleArray)")
             
         }
+    }
+    
+    func createInitialInstructors() {
+    
+        if instructorArray.isEmpty {
+            
+            var johnC = Person(firstName: "John", lastName: "Clem")
+            var bradJ = Person(firstName: "Brad", lastName: "Johnson")
+            
+            self.instructorArray.append(johnC)
+            self.instructorArray.append(bradJ)
+            
+            println("\(instructorArray)")
+            
+        }
+
     }
 
     

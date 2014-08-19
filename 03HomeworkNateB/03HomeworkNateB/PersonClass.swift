@@ -12,6 +12,7 @@ import UIKit
 class Person : NSObject {
     var firstName : String
     var lastName : String
+    var imageFor : UIImage?
     
     init (firstName : String, lastName : String) {
         self.firstName = firstName

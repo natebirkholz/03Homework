@@ -21,9 +21,9 @@ class DetailViewController: UIViewController {
         self.firstNameField.text = self.selectedPerson?.firstName
         self.lastNameField.text = self.selectedPerson?.lastName
         
+
+        
     }
-    
-//    http://makeapppie.com/2014/07/05/using-delegates-and-segues-part-2-the-pizza-demo-app/
     
 
 
@@ -32,6 +32,7 @@ class DetailViewController: UIViewController {
         
         self.selectedPerson?.firstName = self.firstNameField.text
         self.selectedPerson?.lastName = self.lastNameField.text
+
     }
 
 
