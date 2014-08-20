@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Person : NSObject {
+class Person : NSObject, NSCoding {
     var firstName : String
     var lastName : String
     var imageFor : UIImage?
@@ -24,7 +24,7 @@ class Person : NSObject {
         aCoder.encodeObject(lastName, forKey:"lastName")
     }
     
-    init (coder aDecoder: NSCoder!) {
+    required init (coder aDecoder: NSCoder!) {
         self.firstName = aDecoder.decodeObjectForKey("firstName") as String
         self.lastName = aDecoder.decodeObjectForKey("lastName") as String
     }

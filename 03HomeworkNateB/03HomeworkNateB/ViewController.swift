@@ -8,8 +8,6 @@
 
 import UIKit
 
-
-
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableViewMain: UITableView!
@@ -17,17 +15,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var instructorArray = [Person]()
     var plistpath : String?
     var instructorpath : String?
-
-
+    var masterArray = [[Person](), [Person]()] as Array
+    
+//    Make an array of section headings here
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableViewMain.dataSource = self
         self.tableViewMain.delegate = self
-                self.createInstructorPlist()
+        self.createInstructorPlist()
         self.createPeoplePlist()
-
-
         
     }
 
@@ -124,7 +121,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     
     func numberOfSectionsInTableView(tableView: UITableView!) -> Int {
-        return 2
+//        return 2
+        println("Number of sections is \(self.masterArray.count)")
+        return self.masterArray.count
+
+        
     }
     
     func tableView(tableView: UITableView!, titleForHeaderInSection section: Int) -> String! {
@@ -140,11 +141,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
-        if (section == 0) {
-            return self.instructorArray.count
-        } else {
-        return self.peopleArray.count
-        }
+//        if (section == 0) {
+//            return self.instructorArray.count
+//        } else {
+//        return self.peopleArray.count
+//        }
+        
+        return self.masterArray[section].count
     }
     
     
@@ -174,7 +177,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if segue.identifier == "detailVCSegue" {
             if self.tableViewMain.indexPathForSelectedRow().section == 0 {
 
-                var selectedPerson = self.instructorArray[self.tableViewMain.indexPathForSelectedRow().row]
+                var selectedArray = self.masterArray[self.tableViewMain.indexPathForSelectedRow().section]
+                var selectedPerson = selectedArray[self.tableViewMain.indexPathForSelectedRow().row]
                 
                 let vc = segue.destinationViewController as DetailViewController
                 
@@ -247,7 +251,31 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.peopleArray.append(saraW)
             self.peopleArray.append(hiongyaoZ)
             
-//            println("\(peopleArray)")
+            self.masterArray[1].append(nateB)
+            self.masterArray[1].append(matthewB)
+            self.masterArray[1].append(jeffC)
+            self.masterArray[1].append(christieF)
+            self.masterArray[1].append(davidF)
+            self.masterArray[1].append(adrianG)
+            self.masterArray[1].append(jakeH)
+            self.masterArray[1].append(shamsK)
+            self.masterArray[1].append(cameronK)
+            self.masterArray[1].append(koriK)
+            self.masterArray[1].append(parkerL)
+            self.masterArray[1].append(nathanM)
+            self.masterArray[1].append(caseyM)
+            self.masterArray[1].append(brendanM)
+            self.masterArray[1].append(brianM)
+            self.masterArray[1].append(markM)
+            self.masterArray[1].append(rowanN)
+            self.masterArray[1].append(kevinP)
+            self.masterArray[1].append(willR)
+            self.masterArray[1].append(heatherT)
+            self.masterArray[1].append(tuanV)
+            self.masterArray[1].append(zackW)
+            self.masterArray[1].append(saraW)
+            self.masterArray[1].append(hiongyaoZ)
+            
             
         }
     }
@@ -262,7 +290,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.instructorArray.append(johnC)
             self.instructorArray.append(bradJ)
             
-            println("\(instructorArray)")
+            self.masterArray[0].append(johnC)
+            self.masterArray[0].append(bradJ)
+            
             
         }
 
